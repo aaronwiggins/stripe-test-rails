@@ -1,0 +1,51 @@
+.col-xs-12.col-sm-12.col-md-12.col-lg-12
+  .container.text-center
+    <h1>sellers</h1>
+  <% if @user.is_seller? %>
+    <% unless @user.can_receive_payments? %>
+      .panel.panel-default
+        .panel-header.text-center
+          <h4>
+            You wont be able to sell items until you register with Stripe!
+          </h4>
+        .panel-body.text-center
+          <%= link_to 'Connect',
+                    stripe_url,
+                    class: 'btn btn-lg btn-info',
+                    target: '_blank' %>
+      <% end %>
+  <% end %>
+  <%= @sellers.each do |seller| %>
+    .col-xs-12.col-sm-12.col-md-6.col-lg-3
+      .panel.panel-default
+        .panel-header.text-center
+          <h3>
+            <%= seller.title %>
+          <p>
+            <%= seller.description %>
+          </p>
+        .panel-body
+          <% if current_user == seller.owner %>
+            .row
+              .col-lg-4
+                .btn.btn-md.btn-info.btn-options
+                  <%= link_to 'Show', seller %>
+              .col-lg-4
+                .btn.btn-md.btn-warning.btn-options
+                  <%= link_to 'Edit', edit_seller_path(seller) %>
+              .col-lg-4
+                .btn.btn-md.btn-danger.btn-options
+                  <%= link_to 'Destroy', seller, method: :delete, data: { confirm: 'Are you sure?' } %>
+          <% else %>
+            .row
+              .col-xs-12.col-sm-12.col-md-12.col-lg-12.text-center
+                .btn.btn-md.btn-primary.btn-options
+                  <%= link_to 'Show', seller %>
+            <% end %>
+  <% end %>
+
+  %br
+  .col-xs-12.col-sm-12.col-md-12.col-lg-12.text-center
+    .panel.panel-default
+    .btn.btn-md.btn-info
+      <%= link_to 'New Seller', new_user_seller_path(@user) %>

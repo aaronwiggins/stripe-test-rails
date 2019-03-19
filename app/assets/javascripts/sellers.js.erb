@@ -1,0 +1,6 @@
+// Place all the behaviors and hooks related to the matching controller here.
+// All this logic will automatically be available in application.js.
+// You can use CoffeeScript in this file: http://coffeescript.org/
+var stripe = Stripe(<%= Rails.application.credentials[:CLIENT_ID] %>);
+var elements = stripe.elements();
+console.log(stripe)

@@ -1,8 +1,19 @@
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable,
+         :omniauthable, :omniauth_providers => [:stripe_connect]
 
   has_many :sellers, dependent: :destroy
+
+  def is_seller?
+    #seller already exist?
+    sellers.any?
+  end
+
+  def can_receive_payments?
+    #registered on platform?
+    uid? && provider? && access_code? && publishable_key?
+  end
+
 end
